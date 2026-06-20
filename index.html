@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="تطبيق الدفع السريع عبر أكواد USSD - جوال باي وبال باي">
+    <meta name="theme-color" content="#0a0a1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="دفع سريع">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
+    <title>دفع سريع | Quick Pay USSD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Animated Background -->
+        <div class="bg-gradient"></div>
+        <div class="bg-grid"></div>
+
+        <!-- Header -->
+        <header class="app-header" id="app-header">
+            <div class="logo-mark">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="42" height="42" rx="12" stroke="url(#hg)" stroke-width="2.5" fill="none"/>
+                    <text x="24" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="url(#hg)">*#</text>
+                    <defs>
+                        <linearGradient id="hg" x1="0" y1="0" x2="48" y2="48">
+                            <stop stop-color="#00e676"/>
+                            <stop offset="1" stop-color="#448aff"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <h1>دفع سريع</h1>
+            <p class="subtitle">ادفع بسهولة عبر أكواد USSD</p>
+        </header>
+
+        <!-- Provider Selection -->
+        <section class="section" id="provider-section">
+            <h2 class="section-title">
+                <span class="title-icon">①</span>
+                اختر مزود الخدمة
+            </h2>
+            <div class="provider-grid">
+                <button class="provider-card" id="jawwal-card" data-provider="jawwal" aria-label="جوال باي">
+                    <div class="provider-icon-wrap jawwal-theme">
+                        <img src="images/jawwal-logo.png" alt="" class="provider-logo" onerror="this.style.display='none'">
+                        <div class="provider-fallback-icon">J</div>
+                    </div>
+                    <span class="provider-name">جوال باي</span>
+                    <span class="provider-en">Jawwal Pay</span>
+                    <div class="selection-ring"></div>
+                </button>
+                <button class="provider-card" id="palpay-card" data-provider="palpay" aria-label="بال باي">
+                    <div class="provider-icon-wrap palpay-theme">
+                        <img src="images/palpay-logo.png" alt="" class="provider-logo" onerror="this.style.display='none'">
+                        <div class="provider-fallback-icon">P</div>
+                    </div>
+                    <span class="provider-name">بال باي</span>
+                    <span class="provider-en">PalPay</span>
+                    <div class="selection-ring"></div>
+                </button>
+            </div>
+        </section>
+
+        <!-- Action Selection -->
+        <section class="section slide-section" id="action-section">
+            <h2 class="section-title">
+                <span class="title-icon">②</span>
+                اختر نوع العملية
+            </h2>
+            <div class="action-grid">
+                <button class="action-btn" id="friend-btn" data-action="friend">
+                    <div class="action-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <span class="action-label">دفع لصديق</span>
+                </button>
+                <button class="action-btn" id="merchant-btn" data-action="merchant">
+                    <div class="action-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+                    <span class="action-label">دفع لتاجر</span>
+                </button>
+                <button class="action-btn balance-action" id="balance-btn" data-action="balance">
+                    <div class="action-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                            <path d="M2 10h20"/>
+                            <path d="M6 16h4"/>
+                            <path d="M14 16h4"/>
+                        </svg>
+                    </div>
+                    <span class="action-label">استعلام عن الرصيد</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Input Fields -->
+        <section class="section slide-section" id="input-section">
+            <h2 class="section-title">
+                <span class="title-icon">③</span>
+                أدخل البيانات
+            </h2>
+            <div class="inputs-container">
+                <div class="input-group" id="mobile-group">
+                    <div class="input-wrapper">
+                        <input type="tel" id="mobile-input" placeholder=" " maxlength="10" inputmode="tel" autocomplete="tel" required>
+                        <label for="mobile-input">رقم الجوال</label>
+                        <div class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="5" y="2" width="14" height="20" rx="2"/>
+                                <circle cx="12" cy="18" r="1"/>
+                            </svg>
+                        </div>
+                        <div class="input-focus-line"></div>
+                    </div>
+                    <span class="input-hint">مثال: 0599123456</span>
+                    <span class="input-error" id="mobile-error"></span>
+                </div>
+                <div class="input-group" id="amount-group">
+                    <div class="input-wrapper">
+                        <input type="number" id="amount-input" placeholder=" " min="1" step="0.01" inputmode="decimal" required>
+                        <label for="amount-input">المبلغ (₪)</label>
+                        <div class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <line x1="12" y1="1" x2="12" y2="23"/>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="input-focus-line"></div>
+                    </div>
+                    <span class="input-error" id="amount-error"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generate Button -->
+        <div class="action-wrapper slide-section" id="generate-wrapper">
+            <button id="generate-btn" class="primary-button generate-button">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                </svg>
+                <span>ادفع الآن</span>
+            </button>
+        </div>
+
+        <!-- USSD Result -->
+        <section class="section slide-section" id="result-section">
+            <div class="result-card">
+                <div class="result-header">
+                    <div class="result-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <span>تم إنشاء الكود</span>
+                    </div>
+                    <div class="result-provider-tag" id="result-provider-tag"></div>
+                </div>
+                <div class="ussd-display">
+                    <div class="ussd-code" id="ussd-code" dir="ltr"></div>
+                </div>
+                <div class="result-actions">
+                    <a href="#" id="call-btn" class="primary-button call-button">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                        </svg>
+                        <span>اتصل الآن</span>
+                    </a>
+                    <button id="copy-btn" class="secondary-button copy-button" aria-label="نسخ الكود">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        <span>نسخ</span>
+                    </button>
+                </div>
+            </div>
+            <button id="reset-btn" class="reset-button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"/>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                </svg>
+                <span>عملية جديدة</span>
+            </button>
+        </section>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+        <!-- Install Banner -->
+        <div class="install-banner" id="install-banner">
+            <div class="install-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>أضف التطبيق إلى شاشتك الرئيسية</span>
+            </div>
+            <button id="install-btn" class="install-action">تثبيت</button>
+            <button id="dismiss-install" class="install-dismiss" aria-label="إغلاق">&times;</button>
+        </div>
+
+        <!-- History Divider -->
+        <div class="history-divider"></div>
+
+        <!-- Recent Payments -->
+        <section class="history-section" id="history-section">
+            <div class="history-header">
+                <h2 class="section-title">
+                    <span class="title-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </span>
+                    العمليات الأخيرة
+                </h2>
+                <button class="clear-history-btn" id="clear-history-btn" aria-label="مسح السجل">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    <span>مسح الكل</span>
+                </button>
+            </div>
+            <div class="history-list" id="history-list">
+                <!-- Items rendered by JS -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <span>تم تطويره من بيان كلش</span>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
