@@ -1212,11 +1212,12 @@ body {
 .history-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 10px;
+    padding: 10px 12px;
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
+    cursor: pointer;
     transition: var(--duration-normal) var(--ease-in-out);
     transition-property: background, border-color, transform, opacity;
     animation: fadeSlideUp var(--duration-normal) var(--ease-out);
@@ -1224,6 +1225,11 @@ body {
 
 .history-item:hover {
     background: var(--bg-card-hover);
+    border-color: var(--border-medium);
+}
+
+.history-item:active {
+    transform: scale(0.98);
 }
 
 .history-item.removing {
@@ -1238,14 +1244,14 @@ body {
 }
 
 .history-provider-dot {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
     flex-shrink: 0;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 900;
     color: #fff;
 }
@@ -1263,7 +1269,7 @@ body {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
 }
 
 .history-top-row {
@@ -1273,13 +1279,13 @@ body {
 }
 
 .history-action-label {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 700;
     color: var(--text-primary);
 }
 
 .history-amount {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 800;
     color: var(--success);
     direction: ltr;
@@ -1293,14 +1299,14 @@ body {
 }
 
 .history-mobile {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 600;
     color: var(--text-muted);
     direction: ltr;
 }
 
 .history-time {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: var(--text-hint);
     margin-right: auto;
 }
@@ -1308,49 +1314,16 @@ body {
 .history-actions {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     flex-shrink: 0;
-}
-
-.history-call-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: var(--duration-fast) var(--ease-in-out);
-    transition-property: transform, box-shadow;
-    -webkit-appearance: none;
-    appearance: none;
-    color: #fff;
-}
-
-.history-call-btn:active {
-    transform: scale(0.9);
-}
-
-.history-call-btn.jawwal-call {
-    background: linear-gradient(135deg, var(--jawwal-start), #00a844);
-}
-
-.history-call-btn.palpay-call {
-    background: linear-gradient(135deg, var(--palpay-start), #e91e63);
-}
-
-.history-call-btn svg {
-    width: 16px;
-    height: 16px;
 }
 
 .history-delete-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     background: none;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xs);
@@ -1372,8 +1345,8 @@ body {
 }
 
 .history-delete-btn svg {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
 }
 
 .history-empty {
@@ -1397,3 +1370,38 @@ body {
     background: var(--border-subtle);
     margin: 24px 0;
 }
+
+/* === Transaction Message Custom Styles === */
+.input-wrapper input#message-input {
+    direction: rtl;
+}
+
+.history-bullet {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    user-select: none;
+}
+
+.history-message {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.02);
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
+    border-right: 2px solid var(--border-medium);
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.history-provider-dot.jawwal-dot ~ .history-info .history-message {
+    border-right-color: var(--jawwal-start);
+    background: rgba(0, 200, 83, 0.04);
+}
+
+.history-provider-dot.palpay-dot ~ .history-info .history-message {
+    border-right-color: var(--palpay-start);
+    background: rgba(142, 36, 170, 0.04);
+}
+

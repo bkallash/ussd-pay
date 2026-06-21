@@ -11,6 +11,7 @@
         action: null,     // 'friend' | 'merchant' | 'balance'
         mobile: '',
         amount: '',
+        message: '',
     };
 
     // ─── DOM References ───
@@ -25,10 +26,13 @@
     const inputSection = $('#input-section');
     const mobileInput = $('#mobile-input');
     const amountInput = $('#amount-input');
+    const messageInput = $('#message-input');
     const mobileGroup = $('#mobile-group');
     const amountGroup = $('#amount-group');
+    const messageGroup = $('#message-group');
     const mobileError = $('#mobile-error');
     const amountError = $('#amount-error');
+    const messageError = $('#message-error');
     const generateWrapper = $('#generate-wrapper');
     const generateBtn = $('#generate-btn');
     const resultSection = $('#result-section');
@@ -193,6 +197,11 @@
         clearError(amountGroup, amountError);
     });
 
+    messageInput.addEventListener('input', () => {
+        state.message = messageInput.value.trim();
+        clearError(messageGroup, messageError);
+    });
+
     function clearError(group, errorEl) {
         group.classList.remove('error');
         errorEl.textContent = '';
@@ -208,10 +217,13 @@
     function clearInputs() {
         mobileInput.value = '';
         amountInput.value = '';
+        messageInput.value = '';
         state.mobile = '';
         state.amount = '';
+        state.message = '';
         clearError(mobileGroup, mobileError);
         clearError(amountGroup, amountError);
+        clearError(messageGroup, messageError);
     }
 
     function validateInputs() {
@@ -267,7 +279,7 @@
 
         displayResult(code, false);
         triggerCall(code);
-        addToHistory(state.provider, state.action, mobile, amount, code);
+        addToHistory(state.provider, state.action, mobile, amount, code, state.message);
     });
 
     // ─── Display Result ───
@@ -388,7 +400,7 @@
         localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
     }
 
-    function addToHistory(provider, action, mobile, amount, code) {
+    function addToHistory(provider, action, mobile, amount, code, message) {
         const history = getHistory();
         const entry = {
             id: Date.now(),
@@ -397,6 +409,7 @@
             mobile: mobile || '',
             amount: amount || '',
             code,
+            message: message || '',
             timestamp: new Date().toISOString(),
         };
         history.unshift(entry);
@@ -470,7 +483,6 @@
         if (divider) divider.style.display = '';
 
         historyList.innerHTML = history.map(entry => {
-            const encodedCode = entry.code.replace(/#/g, '%23');
             return `
                 <div class="history-item" data-history-id="${entry.id}">
                     <div class="history-provider-dot ${entry.provider}-dot">
@@ -479,19 +491,18 @@
                     <div class="history-info">
                         <div class="history-top-row">
                             <span class="history-action-label">${getActionLabel(entry.action)}</span>
-                            ${entry.amount ? `<span class="history-amount">₪${entry.amount}</span>` : ''}
+                            ${entry.mobile ? `<span class="history-mobile">(${entry.mobile})</span>` : ''}
                         </div>
                         <div class="history-bottom-row">
-                            ${entry.mobile ? `<span class="history-mobile">${entry.mobile}</span>` : ''}
+                            ${entry.message ? `
+                                <span class="history-message" title="${entry.message}">${entry.message}</span>
+                                <span class="history-bullet">•</span>
+                            ` : ''}
                             <span class="history-time">${formatTime(entry.timestamp)}</span>
                         </div>
                     </div>
                     <div class="history-actions">
-                        <a href="tel:${encodedCode}" class="history-call-btn ${entry.provider}-call" aria-label="اتصل">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
-                            </svg>
-                        </a>
+                        ${entry.amount ? `<span class="history-amount">₪${entry.amount}</span>` : ''}
                         <button class="history-delete-btn" data-delete-id="${entry.id}" aria-label="حذف">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"/>
@@ -504,6 +515,87 @@
         }).join('');
     }
 
+    function loadTransaction(id) {
+        const history = getHistory();
+        const entry = history.find(e => e.id === id);
+        if (!entry) return;
+
+        vibrate(15);
+
+        // Set provider
+        state.provider = entry.provider;
+        // Update provider card visuals
+        providerCards.forEach((c) => {
+            c.classList.remove('selected', 'dimmed');
+            if (c.dataset.provider !== entry.provider) {
+                c.classList.add('dimmed');
+            } else {
+                c.classList.add('selected');
+            }
+        });
+        
+        // Update app theme class
+        app.classList.remove('jawwal-active', 'palpay-active');
+        app.classList.add(`${entry.provider}-active`);
+
+        // Show/hide balance button (only for Jawwal)
+        if (entry.provider === 'jawwal') {
+            balanceBtn.classList.add('show');
+        } else {
+            balanceBtn.classList.remove('show');
+        }
+
+        // Show action section
+        showSection(actionSection);
+
+        // Set action
+        state.action = entry.action;
+        // Update action button visuals
+        actionBtns.forEach((b) => {
+            b.classList.remove('selected', 'dimmed');
+            const btnAction = b.dataset.action;
+            if (btnAction === entry.action) {
+                b.classList.add('selected');
+            } else {
+                const isBalance = b.classList.contains('balance-action');
+                const isVisible = isBalance ? b.classList.contains('show') : true;
+                if (isVisible) b.classList.add('dimmed');
+            }
+        });
+
+        // Hide result section
+        hideSection(resultSection);
+
+        if (entry.action === 'balance') {
+            hideSection(inputSection);
+            hideSection(generateWrapper);
+            clearInputs();
+        } else {
+            // Show input fields
+            showSection(inputSection);
+            showSection(generateWrapper);
+            
+            // Populate inputs
+            mobileInput.value = entry.mobile || '';
+            amountInput.value = entry.amount || '';
+            messageInput.value = entry.message || '';
+            
+            state.mobile = entry.mobile || '';
+            state.amount = entry.amount || '';
+            state.message = entry.message || '';
+
+            // Clear errors
+            clearError(mobileGroup, mobileError);
+            clearError(amountGroup, amountError);
+            clearError(messageGroup, messageError);
+        }
+
+        // Scroll to action or input section
+        scrollToElement(inputSection, 150);
+
+        showToast('تم تحميل بيانات العملية ✓');
+    }
+
     // Event delegation for history actions
     historyList.addEventListener('click', (e) => {
         const deleteBtn = e.target.closest('.history-delete-btn');
@@ -512,6 +604,13 @@
             vibrate();
             const id = parseInt(deleteBtn.dataset.deleteId, 10);
             removeFromHistory(id);
+            return;
+        }
+
+        const historyItem = e.target.closest('.history-item');
+        if (historyItem) {
+            const id = parseInt(historyItem.dataset.historyId, 10);
+            loadTransaction(id);
         }
     });
 
@@ -577,7 +676,7 @@
     }, { passive: true });
 
     // ─── Keyboard handling (Enter to generate) ───
-    [mobileInput, amountInput].forEach((input) => {
+    [mobileInput, amountInput, messageInput].forEach((input) => {
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
