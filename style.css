@@ -33,10 +33,10 @@
     --jawwal-glow: rgba(0, 200, 83, 0.25);
     --jawwal-bg: rgba(0, 200, 83, 0.08);
 
-    --palpay-start: #8e24aa;
-    --palpay-end: #f06292;
-    --palpay-glow: rgba(142, 36, 170, 0.25);
-    --palpay-bg: rgba(142, 36, 170, 0.08);
+    --palpay-start: #6a1b9a;
+    --palpay-end: #6a1b9a;
+    --palpay-glow: rgba(106, 27, 154, 0.25);
+    --palpay-bg: rgba(106, 27, 154, 0.08);
 
     --accent-start: #7c4dff;
     --accent-end: #b388ff;
@@ -61,7 +61,7 @@
     --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
     --shadow-glow-jawwal: 0 0 30px rgba(0, 200, 83, 0.15);
-    --shadow-glow-palpay: 0 0 30px rgba(142, 36, 170, 0.15);
+    --shadow-glow-palpay: 0 0 30px rgba(106, 27, 154, 0.15);
 
     --ease-out: cubic-bezier(0.0, 0, 0.2, 1);
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
@@ -92,17 +92,59 @@ body {
     direction: rtl;
 }
 
-/* === Background Effects === */
 .bg-gradient {
     position: fixed;
     inset: 0;
     z-index: 0;
-    background:
-        radial-gradient(ellipse 600px 400px at 20% 10%, rgba(0, 200, 83, 0.06), transparent),
-        radial-gradient(ellipse 500px 400px at 80% 50%, rgba(142, 36, 170, 0.05), transparent),
-        radial-gradient(ellipse 700px 500px at 50% 90%, rgba(124, 77, 255, 0.04), transparent);
     animation: bgPulse 12s ease-in-out infinite alternate;
     pointer-events: none;
+}
+
+.bg-gradient-default,
+.bg-gradient-jawwal,
+.bg-gradient-palpay {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.0s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.bg-gradient-default {
+    background:
+        radial-gradient(ellipse 600px 400px at 20% 10%, rgba(0, 200, 83, 0.06), transparent),
+        radial-gradient(ellipse 500px 400px at 80% 50%, rgba(106, 27, 154, 0.05), transparent),
+        radial-gradient(ellipse 700px 500px at 50% 90%, rgba(124, 77, 255, 0.04), transparent);
+    opacity: 1;
+}
+
+.bg-gradient-jawwal {
+    background:
+        radial-gradient(ellipse 600px 400px at 20% 10%, rgba(0, 200, 83, 0.12), transparent),
+        radial-gradient(ellipse 600px 500px at 80% 60%, rgba(105, 240, 174, 0.08), transparent),
+        radial-gradient(ellipse 700px 500px at 50% 90%, rgba(0, 200, 83, 0.04), transparent);
+}
+
+.bg-gradient-palpay {
+    background:
+        radial-gradient(ellipse 600px 400px at 20% 10%, rgba(106, 27, 154, 0.04), transparent),
+        radial-gradient(ellipse 500px 400px at 80% 50%, rgba(124, 77, 255, 0.10), transparent),
+        radial-gradient(ellipse 700px 500px at 50% 90%, rgba(106, 27, 154, 0.08), transparent);
+}
+
+/* Active states for gradients */
+.app.jawwal-active .bg-gradient-default {
+    opacity: 0;
+}
+.app.jawwal-active .bg-gradient-jawwal {
+    opacity: 1;
+}
+
+.app.palpay-active .bg-gradient-default {
+    opacity: 0;
+}
+.app.palpay-active .bg-gradient-palpay {
+    opacity: 1;
 }
 
 @keyframes bgPulse {
@@ -169,19 +211,9 @@ body {
     font-size: 1.4rem;
     font-weight: 900;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--jawwal-start), var(--palpay-start), var(--accent-start));
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradientShift 6s ease-in-out infinite;
+    color: var(--text-primary);
     line-height: 1.5;
     padding: 4px 0;
-}
-
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% center; }
-    50% { background-position: 100% center; }
 }
 
 .subtitle {
@@ -290,7 +322,7 @@ body {
 
 .palpay-theme {
     background: var(--palpay-bg);
-    border: 1px solid rgba(142, 36, 170, 0.15);
+    border: 1px solid rgba(106, 27, 154, 0.15);
 }
 
 .provider-logo {
@@ -358,14 +390,14 @@ body {
 
 .provider-card.selected[data-provider="palpay"] {
     background: var(--palpay-bg);
-    border-color: rgba(142, 36, 170, 0.3);
+    border-color: rgba(106, 27, 154, 0.3);
     box-shadow: var(--shadow-glow-palpay);
 }
 .provider-card.selected[data-provider="palpay"] .selection-ring {
     border-color: var(--palpay-start);
 }
 .provider-card.selected[data-provider="palpay"] .palpay-theme {
-    box-shadow: 0 0 20px rgba(142, 36, 170, 0.2);
+    box-shadow: 0 0 20px rgba(106, 27, 154, 0.2);
 }
 
 .provider-card:not(.selected) {
@@ -452,11 +484,11 @@ body {
 
 /* PalPay selected action */
 .app.palpay-active .action-btn.selected {
-    border-color: rgba(142, 36, 170, 0.3);
+    border-color: rgba(106, 27, 154, 0.3);
     background: var(--palpay-bg);
 }
 .app.palpay-active .action-btn.selected .action-icon-wrap {
-    background: rgba(142, 36, 170, 0.12);
+    background: rgba(106, 27, 154, 0.12);
 }
 .app.palpay-active .action-btn.selected .action-icon-wrap svg {
     color: var(--palpay-end);
@@ -541,8 +573,8 @@ body {
 }
 
 .app.palpay-active .input-wrapper input:focus {
-    border-color: rgba(142, 36, 170, 0.4);
-    box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.08);
+    border-color: rgba(106, 27, 154, 0.4);
+    box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.08);
 }
 
 .input-wrapper label {
@@ -602,7 +634,7 @@ body {
 }
 
 .app.palpay-active .input-focus-line {
-    background: linear-gradient(90deg, var(--palpay-start), var(--palpay-end));
+    background: var(--palpay-start);
 }
 
 .input-wrapper input:focus ~ .input-focus-line {
@@ -699,8 +731,8 @@ body {
 }
 
 .app.palpay-active .generate-button {
-    background: linear-gradient(135deg, var(--palpay-start), #e91e63);
-    box-shadow: 0 4px 20px rgba(142, 36, 170, 0.25);
+    background: var(--palpay-start);
+    box-shadow: 0 4px 20px rgba(106, 27, 154, 0.25);
 }
 
 /* Shimmer effect on button */
@@ -767,7 +799,7 @@ body {
 .result-provider-tag.palpay-tag {
     background: var(--palpay-bg);
     color: var(--palpay-end);
-    border: 1px solid rgba(142, 36, 170, 0.2);
+    border: 1px solid rgba(106, 27, 154, 0.2);
 }
 
 /* USSD Code Display */
@@ -819,8 +851,8 @@ body {
 }
 
 .app.palpay-active .call-button {
-    background: linear-gradient(135deg, var(--palpay-start), #e91e63);
-    box-shadow: 0 4px 20px rgba(142, 36, 170, 0.25);
+    background: var(--palpay-start);
+    box-shadow: 0 4px 20px rgba(106, 27, 154, 0.25);
 }
 
 /* Balance check uses accent color */
@@ -962,61 +994,102 @@ body {
     margin: 0 auto;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
-    padding: 14px 16px;
-    background: rgba(20, 20, 40, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-medium);
+    padding: 12px 14px;
+    background: rgba(13, 13, 29, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     z-index: 999;
-    box-shadow: var(--shadow-lg);
-    transform: translateY(150%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+                0 0 30px rgba(124, 77, 255, 0.08);
+    transform: translateY(150%) scale(0.95);
     opacity: 0;
-    transition: var(--duration-slow) var(--ease-spring);
-    transition-property: transform, opacity;
+    transition: transform var(--duration-slow) var(--ease-spring), opacity var(--duration-normal) var(--ease-out);
 }
 
 .install-banner.show {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
 }
 
-.install-content {
+.install-brand-info {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     flex: 1;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-secondary);
+    min-width: 0;
 }
 
-.install-content svg {
-    width: 22px;
-    height: 22px;
+.install-app-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.install-text-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.install-app-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.install-app-desc {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.install-actions-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     flex-shrink: 0;
-    color: var(--accent-end);
 }
 
 .install-action {
     flex-shrink: 0;
-    padding: 8px 18px;
+    padding: 8px 16px;
     border: none;
     border-radius: var(--radius-full);
-    background: linear-gradient(135deg, var(--accent-start), #6200ea);
+    background: var(--accent-start);
     font-family: var(--font);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 800;
     color: #fff;
     cursor: pointer;
-    transition: transform var(--duration-fast) var(--ease-spring);
+    box-shadow: 0 4px 12px rgba(124, 77, 255, 0.35);
+    transition: transform var(--duration-fast) var(--ease-spring), box-shadow var(--duration-fast) var(--ease-out);
     -webkit-appearance: none;
     appearance: none;
 }
 
+.install-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(124, 77, 255, 0.5);
+}
+
 .install-action:active {
-    transform: scale(0.93);
+    transform: translateY(0) scale(0.95);
 }
 
 .install-dismiss {
@@ -1026,13 +1099,34 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
-    border: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
     color: var(--text-muted);
-    font-size: 1.3rem;
     cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
     -webkit-appearance: none;
     appearance: none;
+}
+
+.install-dismiss svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.install-dismiss:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.install-dismiss:hover svg {
+    transform: rotate(90deg);
+}
+
+.install-dismiss:active {
+    transform: scale(0.92);
 }
 
 /* === Animations === */
@@ -1261,7 +1355,7 @@ body {
 }
 
 .history-provider-dot.palpay-dot {
-    background: linear-gradient(135deg, var(--palpay-start), #e91e63);
+    background: var(--palpay-start);
 }
 
 .history-info {
@@ -1402,6 +1496,6 @@ body {
 
 .history-provider-dot.palpay-dot ~ .history-info .history-message {
     border-right-color: var(--palpay-start);
-    background: rgba(142, 36, 170, 0.04);
+    background: rgba(106, 27, 154, 0.04);
 }
 

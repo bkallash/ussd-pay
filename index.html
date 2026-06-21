@@ -18,21 +18,20 @@
 <body>
     <div class="app">
         <!-- Animated Background -->
-        <div class="bg-gradient"></div>
+        <div class="bg-gradient">
+            <div class="bg-gradient-default"></div>
+            <div class="bg-gradient-jawwal"></div>
+            <div class="bg-gradient-palpay"></div>
+        </div>
         <div class="bg-grid"></div>
 
         <!-- Header -->
         <header class="app-header" id="app-header">
             <div class="logo-mark">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="3" width="42" height="42" rx="12" stroke="url(#hg)" stroke-width="2.5" fill="none"/>
-                    <text x="24" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="url(#hg)">*#</text>
-                    <defs>
-                        <linearGradient id="hg" x1="0" y1="0" x2="48" y2="48">
-                            <stop stop-color="#00e676"/>
-                            <stop offset="1" stop-color="#448aff"/>
-                        </linearGradient>
-                    </defs>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="6" y="2" width="12" height="20" rx="3" stroke="currentColor" stroke-width="1.5" opacity="0.9" class="logo-phone"/>
+                    <path d="M13.5 6L9.5 12H13L12 16L16.5 10H13L13.5 6Z" fill="#00e676" class="logo-lightning"/>
+                    <circle cx="12" cy="19" r="1" fill="currentColor" opacity="0.9"/>
                 </svg>
             </div>
             <h1>دفع سريع</h1>
@@ -135,9 +134,9 @@
                         <input type="number" id="amount-input" placeholder=" " min="1" step="0.01" inputmode="decimal" required>
                         <label for="amount-input">المبلغ (₪)</label>
                         <div class="input-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <line x1="12" y1="1" x2="12" y2="23"/>
-                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8 5v10a2 2 0 0 0 2 2h3V8"/>
+                                <path d="M10.5 16V7a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v10"/>
                             </svg>
                         </div>
                         <div class="input-focus-line"></div>
@@ -217,16 +216,22 @@
 
         <!-- Install Banner -->
         <div class="install-banner" id="install-banner">
-            <div class="install-content">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                <span>أضف التطبيق إلى شاشتك الرئيسية</span>
+            <div class="install-brand-info">
+                <img src="images/icon-192.png" alt="USSD Pay Icon" class="install-app-icon">
+                <div class="install-text-details">
+                    <div class="install-app-name">سريع الدفع USSD</div>
+                    <div class="install-app-desc">أضف التطبيق لشاشتك للوصول السريع</div>
+                </div>
             </div>
-            <button id="install-btn" class="install-action">تثبيت</button>
-            <button id="dismiss-install" class="install-dismiss" aria-label="إغلاق">&times;</button>
+            <div class="install-actions-wrapper">
+                <button id="install-btn" class="install-action">تثبيت</button>
+                <button id="dismiss-install" class="install-dismiss" aria-label="إغلاق">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <!-- History Divider -->
