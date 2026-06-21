@@ -3,7 +3,7 @@
    Cache-first strategy for offline support
    ============================================ */
 
-const CACHE_VERSION = 'quickpay-v11';
+const CACHE_VERSION = 'quickpay-v12';
 
 const STATIC_ASSETS = [
     './',
@@ -11,10 +11,10 @@ const STATIC_ASSETS = [
     './style.css',
     './app.js',
     './manifest.json',
-    './images/jawwal-logo.png',
-    './images/palpay-logo.png',
-    './images/icon-192.png',
-    './images/icon-512.png',
+    './images/jawwal-logo.webp',
+    './images/palpay-logo.webp',
+    './images/icon-192.webp',
+    './images/icon-512.webp',
 ];
 
 const FONT_CACHE = 'quickpay-fonts-v1';
