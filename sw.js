@@ -3,7 +3,7 @@
    Cache-first strategy for offline support
    ============================================ */
 
-const CACHE_VERSION = 'quickpay-v16';
+const CACHE_VERSION = 'quickpay-v18';
 
 const STATIC_ASSETS = [
     './',
@@ -15,6 +15,9 @@ const STATIC_ASSETS = [
     './images/palpay-logo.webp',
     './images/icon-192.webp',
     './images/icon-512.webp',
+    './images/icon-192-maskable.webp',
+    './images/icon-512-maskable.webp',
+    './images/icon-192.png',
 ];
 
 const FONT_CACHE = 'quickpay-fonts-v1';
