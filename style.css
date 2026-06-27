@@ -1780,6 +1780,40 @@ body {
     color: var(--error);
 }
 
+/* Disabled PIN features */
+.pin-disabled-group {
+    opacity: 0.6;
+}
+
+.pin-disabled-group input:disabled {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text-muted) !important;
+    cursor: not-allowed;
+}
+
+.pin-disabled-group .pin-toggle-btn:disabled,
+.pin-disabled-group .pin-save-btn:disabled,
+.pin-disabled-group .pin-delete-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.disabled-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    background: rgba(239, 83, 80, 0.15);
+    color: #ef5350;
+    margin-right: 8px;
+    border: 1px solid rgba(239, 83, 80, 0.3);
+}
+
+.pin-status-msg.disabled {
+    color: #ef5350;
+}
+
 @media (min-width: 481px) {
     .app-header {
         justify-content: space-between;

@@ -294,8 +294,8 @@
         const template = USSD_TEMPLATES[state.provider][state.action];
         let code = template(mobile, amount);
 
-        // Apply saved PIN if available and not checking balance
-        const pin = localStorage.getItem(PIN_KEYS[state.provider]);
+        // Apply saved PIN if available and not checking balance (disabled for palpay)
+        const pin = state.provider === 'jawwal' ? localStorage.getItem(PIN_KEYS.jawwal) : null;
         if (pin && state.action !== 'balance') {
             if (code.endsWith('#')) {
                 code = code.slice(0, -1) + `*${pin}#`;
@@ -717,20 +717,16 @@
             pinStatusJawwal.className = 'pin-status-msg empty';
         }
 
-        // PalPay
-        const palpayPin = localStorage.getItem(PIN_KEYS.palpay) || '';
-        pinInputPalpay.value = palpayPin;
+        // PalPay (Disabled)
+        localStorage.removeItem(PIN_KEYS.palpay);
+        pinInputPalpay.value = '';
+        pinInputPalpay.disabled = true;
         pinInputPalpay.type = 'password';
         updateModalEyeIcon(pinInputPalpay, false);
-        if (palpayPin) {
-            pinDeletePalpay.style.display = 'inline-flex';
-            pinStatusPalpay.textContent = 'تم حفظ رمز PIN لـ بال باي';
-            pinStatusPalpay.className = 'pin-status-msg saved';
-        } else {
-            pinDeletePalpay.style.display = 'none';
-            pinStatusPalpay.textContent = 'لا يوجد رمز PIN لـ بال باي.';
-            pinStatusPalpay.className = 'pin-status-msg empty';
-        }
+        pinSavePalpay.disabled = true;
+        pinDeletePalpay.style.display = 'none';
+        pinStatusPalpay.textContent = 'ميزة رمز PIN لـ بال باي معطلة حالياً.';
+        pinStatusPalpay.className = 'pin-status-msg disabled';
     }
 
     function updateModalEyeIcon(inputEl, visible) {
@@ -833,33 +829,16 @@
         loadSavedPins();
     });
 
-    // Save PalPay PIN
+    // Save PalPay PIN (Disabled)
     pinSavePalpay.addEventListener('click', () => {
         vibrate(20);
-        const val = pinInputPalpay.value.trim();
-        if (!val) {
-            pinStatusPalpay.textContent = 'الرجاء إدخال رمز PIN أولاً';
-            pinStatusPalpay.className = 'pin-status-msg error';
-            vibrate([20, 50, 20]);
-            return;
-        }
-        if (!/^[0-9]{4,8}$/.test(val)) {
-            pinStatusPalpay.textContent = 'يجب أن يتكون رمز PIN من 4 إلى 8 أرقام';
-            pinStatusPalpay.className = 'pin-status-msg error';
-            vibrate([20, 50, 20]);
-            return;
-        }
-        localStorage.setItem(PIN_KEYS.palpay, val);
-        showToast('تم حفظ رمز PIN لـ بال باي بنجاح ✓');
-        loadSavedPins();
+        showToast('عذراً، ميزة رمز PIN لـ بال باي معطلة حالياً');
     });
 
-    // Delete PalPay PIN
+    // Delete PalPay PIN (Disabled)
     pinDeletePalpay.addEventListener('click', () => {
         vibrate(20);
         localStorage.removeItem(PIN_KEYS.palpay);
-        pinInputPalpay.value = '';
-        showToast('تم إزالة رمز PIN لـ بال باي');
         loadSavedPins();
     });
 
