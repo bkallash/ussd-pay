@@ -46,6 +46,23 @@
     const installBtn = $('#install-btn');
     const dismissInstall = $('#dismiss-install');
 
+    const pinModal = $('#pin-modal');
+    const pinModalClose = $('#pin-modal-close');
+    const pinSettingsTrigger = $('#pin-settings-trigger');
+    const pinInputJawwal = $('#pin-input-jawwal');
+    const pinSaveJawwal = $('#pin-save-jawwal');
+    const pinDeleteJawwal = $('#pin-delete-jawwal');
+    const pinStatusJawwal = $('#pin-status-jawwal');
+    const pinInputPalpay = $('#pin-input-palpay');
+    const pinSavePalpay = $('#pin-save-palpay');
+    const pinDeletePalpay = $('#pin-delete-palpay');
+    const pinStatusPalpay = $('#pin-status-palpay');
+
+    const PIN_KEYS = {
+        jawwal: 'ussd_pay_pin_jawwal',
+        palpay: 'ussd_pay_pin_palpay',
+    };
+
     // ─── USSD Code Templates ───
     const USSD_TEMPLATES = {
         jawwal: {
@@ -275,7 +292,15 @@
         const mobile = state.mobile.replace(/\s/g, '');
         const amount = state.amount;
         const template = USSD_TEMPLATES[state.provider][state.action];
-        const code = template(mobile, amount);
+        let code = template(mobile, amount);
+
+        // Apply saved PIN if available and not checking balance
+        const pin = localStorage.getItem(PIN_KEYS[state.provider]);
+        if (pin && state.action !== 'balance') {
+            if (code.endsWith('#')) {
+                code = code.slice(0, -1) + `*${pin}#`;
+            }
+        }
 
         displayResult(code, false);
         triggerCall(code);
@@ -674,6 +699,183 @@
             // Allow normal scrolling
         }
     }, { passive: true });
+
+    // ─── PIN Handling ───
+    function loadSavedPins() {
+        // Jawwal Pay
+        const jawwalPin = localStorage.getItem(PIN_KEYS.jawwal) || '';
+        pinInputJawwal.value = jawwalPin;
+        pinInputJawwal.type = 'password';
+        updateModalEyeIcon(pinInputJawwal, false);
+        if (jawwalPin) {
+            pinDeleteJawwal.style.display = 'inline-flex';
+            pinStatusJawwal.textContent = 'تم حفظ رمز PIN لـ جوال باي';
+            pinStatusJawwal.className = 'pin-status-msg saved';
+        } else {
+            pinDeleteJawwal.style.display = 'none';
+            pinStatusJawwal.textContent = 'لا يوجد رمز PIN لـ جوال باي.';
+            pinStatusJawwal.className = 'pin-status-msg empty';
+        }
+
+        // PalPay
+        const palpayPin = localStorage.getItem(PIN_KEYS.palpay) || '';
+        pinInputPalpay.value = palpayPin;
+        pinInputPalpay.type = 'password';
+        updateModalEyeIcon(pinInputPalpay, false);
+        if (palpayPin) {
+            pinDeletePalpay.style.display = 'inline-flex';
+            pinStatusPalpay.textContent = 'تم حفظ رمز PIN لـ بال باي';
+            pinStatusPalpay.className = 'pin-status-msg saved';
+        } else {
+            pinDeletePalpay.style.display = 'none';
+            pinStatusPalpay.textContent = 'لا يوجد رمز PIN لـ بال باي.';
+            pinStatusPalpay.className = 'pin-status-msg empty';
+        }
+    }
+
+    function updateModalEyeIcon(inputEl, visible) {
+        const toggleBtn = inputEl.parentElement.querySelector('.pin-toggle-btn');
+        if (!toggleBtn) return;
+        if (visible) {
+            toggleBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+            `;
+        } else {
+            toggleBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            `;
+        }
+    }
+
+    // Modal controls
+    pinSettingsTrigger.addEventListener('click', () => {
+        vibrate();
+        loadSavedPins();
+        pinModal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // prevent scroll
+    });
+
+    function closePinModal() {
+        vibrate();
+        pinModal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    pinModalClose.addEventListener('click', closePinModal);
+
+    // Close modal on click outside modal card
+    pinModal.addEventListener('click', (e) => {
+        if (e.target === pinModal) {
+            closePinModal();
+        }
+    });
+
+    // Close on escape key
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && pinModal.classList.contains('show')) {
+            closePinModal();
+        }
+    });
+
+    // Eye toggle buttons click
+    $$('.pin-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            vibrate();
+            const targetId = btn.dataset.target;
+            const inputEl = $(`#${targetId}`);
+            if (!inputEl) return;
+            const isPassword = inputEl.type === 'password';
+            inputEl.type = isPassword ? 'text' : 'password';
+            updateModalEyeIcon(inputEl, isPassword);
+        });
+    });
+
+    // Limit inputs to numbers
+    [pinInputJawwal, pinInputPalpay].forEach(input => {
+        input.addEventListener('input', () => {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        });
+    });
+
+    // Save Jawwal PIN
+    pinSaveJawwal.addEventListener('click', () => {
+        vibrate(20);
+        const val = pinInputJawwal.value.trim();
+        if (!val) {
+            pinStatusJawwal.textContent = 'الرجاء إدخال رمز PIN أولاً';
+            pinStatusJawwal.className = 'pin-status-msg error';
+            vibrate([20, 50, 20]);
+            return;
+        }
+        if (!/^[0-9]{4,8}$/.test(val)) {
+            pinStatusJawwal.textContent = 'يجب أن يتكون رمز PIN من 4 إلى 8 أرقام';
+            pinStatusJawwal.className = 'pin-status-msg error';
+            vibrate([20, 50, 20]);
+            return;
+        }
+        localStorage.setItem(PIN_KEYS.jawwal, val);
+        showToast('تم حفظ رمز PIN لـ جوال باي بنجاح ✓');
+        loadSavedPins();
+    });
+
+    // Delete Jawwal PIN
+    pinDeleteJawwal.addEventListener('click', () => {
+        vibrate(20);
+        localStorage.removeItem(PIN_KEYS.jawwal);
+        pinInputJawwal.value = '';
+        showToast('تم إزالة رمز PIN لـ جوال باي');
+        loadSavedPins();
+    });
+
+    // Save PalPay PIN
+    pinSavePalpay.addEventListener('click', () => {
+        vibrate(20);
+        const val = pinInputPalpay.value.trim();
+        if (!val) {
+            pinStatusPalpay.textContent = 'الرجاء إدخال رمز PIN أولاً';
+            pinStatusPalpay.className = 'pin-status-msg error';
+            vibrate([20, 50, 20]);
+            return;
+        }
+        if (!/^[0-9]{4,8}$/.test(val)) {
+            pinStatusPalpay.textContent = 'يجب أن يتكون رمز PIN من 4 إلى 8 أرقام';
+            pinStatusPalpay.className = 'pin-status-msg error';
+            vibrate([20, 50, 20]);
+            return;
+        }
+        localStorage.setItem(PIN_KEYS.palpay, val);
+        showToast('تم حفظ رمز PIN لـ بال باي بنجاح ✓');
+        loadSavedPins();
+    });
+
+    // Delete PalPay PIN
+    pinDeletePalpay.addEventListener('click', () => {
+        vibrate(20);
+        localStorage.removeItem(PIN_KEYS.palpay);
+        pinInputPalpay.value = '';
+        showToast('تم إزالة رمز PIN لـ بال باي');
+        loadSavedPins();
+    });
+
+    pinInputJawwal.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            pinSaveJawwal.click();
+        }
+    });
+
+    pinInputPalpay.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            pinSavePalpay.click();
+        }
+    });
 
     // ─── Keyboard handling (Enter to generate) ───
     [mobileInput, amountInput, messageInput].forEach((input) => {

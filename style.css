@@ -1499,3 +1499,290 @@ body {
     background: rgba(106, 27, 154, 0.04);
 }
 
+/* === PIN Settings Modal & Button === */
+.header-settings-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.header-settings-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+.header-settings-btn:active {
+    transform: scale(0.95);
+}
+
+.header-settings-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(4, 4, 10, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-normal) var(--ease-out);
+    padding: 20px;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: rgba(13, 13, 29, 0.95);
+    border: 1.5px solid var(--border-medium);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg), 0 0 50px rgba(124, 77, 255, 0.15);
+    transform: scale(0.9) translateY(20px);
+    transition: transform var(--duration-normal) var(--ease-spring);
+    padding: 24px;
+}
+
+.modal-overlay.show .modal-card {
+    transform: scale(1) translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 12px;
+}
+
+.modal-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+}
+
+.modal-close-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.modal-close-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.modal-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.modal-input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-input-header {
+    display: flex;
+    align-items: center;
+}
+
+.provider-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+}
+
+.provider-badge.jawwal-badge {
+    background: var(--jawwal-bg);
+    color: var(--jawwal-end);
+    border: 1px solid rgba(0, 200, 83, 0.2);
+}
+
+.provider-badge.palpay-badge {
+    background: var(--palpay-bg);
+    color: var(--palpay-end);
+    border: 1px solid rgba(106, 27, 154, 0.2);
+}
+
+.pin-form-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.pin-input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.pin-input-wrapper input {
+    padding-left: 48px !important;
+}
+
+.pin-toggle-btn {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: color var(--duration-fast) var(--ease-out);
+    z-index: 2;
+}
+
+.pin-toggle-btn:hover {
+    color: var(--text-secondary);
+}
+
+.pin-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.pin-action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.pin-save-btn {
+    height: 56px;
+    padding: 0 24px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    background: var(--accent-start);
+    box-shadow: 0 4px 12px var(--accent-glow);
+    transition: var(--duration-normal) var(--ease-in-out);
+    transition-property: transform, box-shadow, background;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.pin-save-btn:active {
+    transform: scale(0.95);
+}
+
+.pin-save-btn.jawwal-btn {
+    background: var(--jawwal-start);
+    box-shadow: 0 4px 12px var(--jawwal-glow);
+}
+
+.pin-save-btn.palpay-btn {
+    background: var(--palpay-start);
+    box-shadow: 0 4px 12px var(--palpay-glow);
+}
+
+.pin-delete-btn {
+    height: 56px;
+    padding: 0 16px;
+    border: 1.5px solid rgba(255, 82, 82, 0.2);
+    background: rgba(255, 82, 82, 0.08);
+    color: var(--error);
+    border-radius: var(--radius-md);
+    font-family: var(--font);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--duration-normal) var(--ease-in-out);
+    transition-property: transform, background, border-color;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.pin-delete-btn:hover {
+    background: rgba(255, 82, 82, 0.12);
+    border-color: rgba(255, 82, 82, 0.3);
+}
+
+.pin-delete-btn:active {
+    transform: scale(0.95);
+}
+
+.pin-status-msg {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 4px;
+    min-height: 18px;
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.pin-status-msg.saved {
+    color: var(--success);
+}
+
+.pin-status-msg.empty {
+    color: var(--text-muted);
+}
+
+.pin-status-msg.error {
+    color: var(--error);
+}
+
+@media (min-width: 481px) {
+    .app-header {
+        justify-content: space-between;
+    }
+}
+

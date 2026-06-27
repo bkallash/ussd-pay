@@ -3,7 +3,7 @@
    Cache-first strategy for offline support
    ============================================ */
 
-const CACHE_VERSION = 'quickpay-v12';
+const CACHE_VERSION = 'quickpay-v16';
 
 const STATIC_ASSETS = [
     './',
